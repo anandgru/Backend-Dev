@@ -1,27 +1,51 @@
-const http = require('http');
+const http = require("http");
+const fs = require("fs");
 
 // Create the server
 const server = http.createServer((req, res) => {
+  const url = req.url;
+  const method = req.method;
+  if (url === "/") {
+    res.write("<html><head><title>Your Msg</title></head>");
+    res.write(
+      '<body> <form action="/message" method="POST"><input type="text" name="msg"><button type="submit">Send</button></body></html>'
+    );
+    return res.end();
+  }
   // Set the response headers
-  res.setHeader('Content-Type', 'text/plain');
-
+  res.setHeader("Content-Type", "text/html");
+  if (url === "/message" && method === "POST") {
+    const body = [];
+    req.on("data", (chunk) => {
+      body.push(chunk);
+    });
+    req.on("end", () => {
+      const parsedBody = Buffer.concat(body).toString();
+      const message = parsedBody.split("=")[1];
+      fs.writeFileSync("msg.txt", message);
+    });
+    res.statusCode = 302;
+    res.setHeader("Location", "/");
+    return res.end();
+  }
   // Check the request URL and return the appropriate response
   switch (req.url) {
-    case '/home':
+    case "/home":
       res.writeHead(200);
-      res.end('Welcome home');
+      res.end("Welcome home");
       break;
-    case '/about':
+    case "/about":
       res.writeHead(200);
-      res.end('Welcome to About Us page');
+      res.end("Welcome to About Us page");
       break;
-    case '/node':
+    case "/node":
       res.writeHead(200);
-      res.end('Welcome to my Node Js project');
+      res.end("Welcome to my Node Js project");
       break;
     default:
       res.writeHead(404);
-      res.end('Page not found');
+      console.log(url);
+      res.end("Page not found");
       break;
   }
 });
