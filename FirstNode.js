@@ -1,14 +1,24 @@
 const http = require("http");
 const fs = require("fs");
+var fileData;
 
 // Create the server
 const server = http.createServer((req, res) => {
   const url = req.url;
   const method = req.method;
   if (url === "/") {
+    fs.readFile("msg.txt", "utf8", (err, data) => {
+      if (err) {
+        console.log("Error in readiing file: ", err);
+        return;
+      }
+      fileData = data;
+    });
     res.write("<html><head><title>Your Msg</title></head>");
+    res.write("<body>");
+    res.write(`<pre>${fileData}</pre>`);
     res.write(
-      '<body> <form action="/message" method="POST"><input type="text" name="msg"><button type="submit">Send</button></body></html>'
+      '<form action="/message" method="POST"><input type="text" name="msg"><button type="submit">Send</button></body></html>'
     );
     return res.end();
   }
