@@ -1,0 +1,19 @@
+{
+  "name": "backend-dev",
+  "version": "1.0.0",
+  "description": "\"Sharpner\"",
+  "main": "FirstNode.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node FirstNode.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "BACKEND-DEV"
+  },
+  "author": "Anand",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
